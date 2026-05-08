@@ -1,0 +1,77 @@
+.stepper-container {
+    display: flex;
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    height: 44px;
+    background: #fff;
+}
+
+.step-item {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.step-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.step-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -16px;
+    width: 32px;
+    height: 32px;
+    background-color: inherit;
+    border-top: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+    transform: translateY(-50%) rotate(45deg);
+    z-index: 1;
+    border-top-right-radius: 2px;
+}
+
+.step-item:last-child::after {
+    display: none;
+}
+
+.step-item--active {
+    background-color: #33a8c0;
+    color: white;
+}
+
+.step-item--active::after {
+    border-color: #33a8c0;
+}
+
+.step-item--completed {
+    background-color: #ffffff;
+    color: #374151;
+}
+
+.step-item--completed::after {
+    border-color: #e5e7eb;
+}
+
+.step-item--completed.next-is-active::after {
+    border-color: #ffffff;
+}
+
+.step-item--inactive {
+    background-color: #ffffff;
+    color: #9ca3af;
+    /* Chữ xám nhạt */
+}

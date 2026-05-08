@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '@components/layout/MainLayout';
 import { ROUTES } from '@constants/routes';
 import { HomePage } from '@features/misc/pages/HomePage';
+import { UIDemoPage } from '@features/misc/pages/UIDemoPage';
 import { VideoCreationPage } from '@features/video/pages/VideoCreationPage';
 
 export const router = createBrowserRouter([
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.VIDEO_CREATION,
         element: <VideoCreationPage />,
+      },
+      {
+        path: ROUTES.UI_DEMO,
+        element: <UIDemoPage />,
       },
       {
         path: ROUTES.COUNTER,
