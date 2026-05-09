@@ -25,7 +25,7 @@ export const VideoCreationPage = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Tạo video bằng AI"
+        title="Cấu hình tự động tạo video"
         className="w-full max-w-4xl overflow-hidden p-0"
       >
         <ModalCreationPage onClose={() => setIsModalOpen(false)} />

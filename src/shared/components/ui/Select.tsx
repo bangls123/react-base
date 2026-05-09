@@ -4,11 +4,27 @@ import { cn } from '@/utils/cn';
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   error?: string;
   label?: string;
+  placeholder?: string;
   options: { label: string; value: string | number }[];
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, error, label, options, ...props }, ref) => {
+  ({ className, error, label, options, placeholder, ...props }, ref) => {
+    const [internalValue, setInternalValue] = React.useState(props.value ?? props.defaultValue ?? '');
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setInternalValue(e.target.value);
+      props.onChange?.(e);
+    };
+
+    React.useEffect(() => {
+      if (props.value !== undefined) {
+        setInternalValue(props.value);
+      }
+    }, [props.value]);
+
+    const isPlaceholderSelected = internalValue === '';
+
     return (
       <div className="w-full">
         {label && <label className="mb-1 block text-sm font-medium text-gray-700">{label}</label>}
@@ -17,13 +33,21 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               'block w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50',
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+              isPlaceholderSelected ? 'text-gray-400' : 'text-gray-900',
               className,
             )}
             ref={ref}
+            defaultValue={props.value === undefined && props.defaultValue === undefined ? "" : undefined}
             {...props}
+            onChange={handleChange}
           >
+            {placeholder && (
+              <option value="" disabled hidden>
+                {placeholder}
+              </option>
+            )}
             {options.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} value={option.value} className="text-gray-900">
                 {option.label}
               </option>
             ))}

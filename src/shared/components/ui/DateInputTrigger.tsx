@@ -44,32 +44,59 @@ const ChevronDown = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export interface DateInputProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DateInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  error?: string;
   placeholder?: string;
 }
 
-const DateInputTrigger: React.FC<DateInputProps> = ({
-  placeholder = "Chọn ngày",
-  className,
-  ...props
-}) => {
-  return (
-    <div
-      className={cn(
-        "group flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 transition-all hover:border-gray-300",
-        className
-      )}
-      {...props}
-    >
-      <div className="flex items-center gap-3">
-        <CalendarIcon className="h-5 w-5 text-[#4FB3D9]" strokeWidth={2} />
-        <span className="text-[15px] text-gray-400">
-          {placeholder}
-        </span>
+const DateInputTrigger = React.forwardRef<HTMLInputElement, DateInputProps>(
+  ({ className, error, placeholder = "Chọn ngày", value, onClick, ...props }, ref) => {
+    let displayValue = placeholder;
+    if (value) {
+      const date = new Date(value as string);
+      if (!isNaN(date.getTime())) {
+        displayValue = date.toLocaleDateString('vi-VN');
+      }
+    }
+
+    return (
+      <div className={cn("relative w-full", className)}>
+        <div
+          className={cn(
+            "group flex h-8 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 transition-all hover:border-gray-300",
+            error && "border-red-500 focus-visible:ring-red-500"
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <CalendarIcon className="h-5 w-5 text-[#4FB3D9]" strokeWidth={2} />
+            <span className={cn("text-[13px]", value ? "text-gray-700" : "text-gray-400")}>
+              {displayValue}
+            </span>
+          </div>
+          <ChevronDown className="h-4 w-4 text-gray-400 transition-transform group-hover:text-gray-600" />
+        </div>
+
+        <input
+          type="date"
+          ref={ref}
+          value={value}
+          onClick={(e) => {
+            if ('showPicker' in HTMLInputElement.prototype) {
+              try {
+                e.currentTarget.showPicker();
+              } catch (err) { }
+            }
+            onClick?.(e);
+          }}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          {...props}
+        />
+        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       </div>
-      <ChevronDown className="h-4 w-4 text-gray-400 transition-transform group-hover:text-gray-600" />
-    </div>
-  );
-};
+    );
+  }
+);
+
+DateInputTrigger.displayName = "DateInputTrigger";
 
 export { DateInputTrigger };
