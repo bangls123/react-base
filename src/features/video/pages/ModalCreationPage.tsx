@@ -53,11 +53,9 @@ const PaperPlaneIcon = () => (
     </svg>
 );
 
-const SpeakerIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={cn("w-4 h-4", className)}>
-        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+const PlayIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={cn("w-4 h-4", className)}>
+        <path d="M8 5v14l11-7z" />
     </svg>
 );
 
@@ -121,7 +119,7 @@ function CharacterSelect({ value, onChange }: { value: string, onChange: (val: s
                             onClick={handlePlayVoice}
                             className="flex h-7 w-7 items-center justify-center rounded-full text-[#33a8c0] hover:bg-[#e6f4f7] transition-colors"
                         >
-                            <SpeakerIcon />
+                            <PlayIcon />
                         </button>
                     )}
                     <svg className={cn("ml-1 h-4 w-4 text-gray-400 transition-transform", isOpen && "rotate-180")} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,23 +176,150 @@ const TiktokIcon = () => (
     </svg>
 );
 
-const SiteTag = ({ label, platform }: { label: string, platform?: 'fb' | 'yt' | 'web' }) => {
+const SiteTag = ({ label, platform, onRemove }: { label: string, platform?: 'fb' | 'yt' | 'web', onRemove: () => void }) => {
     const iconColors = { fb: '1877F2', yt: 'FF0000', web: '33a8c0' };
     const bgColor = iconColors[platform || 'web'];
     return (
         <div className="flex items-center gap-1.5 rounded bg-[#eef8fa] px-2 py-1 text-xs text-gray-700 border border-[#d2f0f4]">
             <img src={`https://ui-avatars.com/api/?name=${label.charAt(0)}&background=${bgColor}&color=fff&size=16`} alt="" className="w-4 h-4 rounded-full" />
             <span className="font-medium whitespace-nowrap">{label}</span>
-            <button type="button" className="text-gray-400 hover:text-gray-600 ml-0.5">✕</button>
+            <button type="button" onClick={(e) => { e.stopPropagation(); onRemove(); }} className="text-gray-400 hover:text-gray-600 ml-0.5">✕</button>
         </div>
     );
 };
 
+const TAG_SUGGESTIONS = [
+    'Mực Tím',
+    'Báo Tuổi Trẻ',
+    'Truyền hình - Báo Tuổi Trẻ',
+    'Tuổi Trẻ Cười',
+    'Thanh Niên',
+    'VNExpress',
+    'Dân Trí',
+    'VTV',
+    'Zing News',
+    'Tin Tức 24h'
+];
+
+function TagInput({ tags, setTags, platform, placeholder }: { tags: string[], setTags: (tags: string[]) => void, platform?: 'fb' | 'yt' | 'web', placeholder?: string }) {
+    const [inputValue, setInputValue] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const filteredSuggestions = TAG_SUGGESTIONS.filter(s =>
+        s.toLowerCase().includes(inputValue.toLowerCase()) && !tags.includes(s)
+    );
+
+    // Reset index khi nội dung search thay đổi
+    useEffect(() => {
+        setActiveIndex(0);
+    }, [inputValue, tags.length]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleAddTag = (tag: string) => {
+        if (!tags.includes(tag)) {
+            setTags([...tags, tag]);
+        }
+        setInputValue('');
+        setIsOpen(true);
+        inputRef.current?.focus();
+    };
+
+    const handleRemoveTag = (tag: string) => {
+        setTags(tags.filter(t => t !== tag));
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (!isOpen) {
+                setIsOpen(true);
+            } else {
+                setActiveIndex(prev => (prev + 1) % filteredSuggestions.length);
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (isOpen) {
+                setActiveIndex(prev => (prev - 1 + filteredSuggestions.length) % filteredSuggestions.length);
+            }
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (isOpen && filteredSuggestions.length > 0) {
+                handleAddTag(filteredSuggestions[activeIndex]);
+            } else if (inputValue) {
+                handleAddTag(inputValue);
+            }
+        } else if (e.key === 'Backspace' && !inputValue && tags.length > 0) {
+            handleRemoveTag(tags[tags.length - 1]);
+        } else if (e.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
+    return (
+        <div className="relative" ref={containerRef}>
+            <div
+                className="flex flex-wrap items-center gap-2 rounded-md border border-gray-200 bg-white p-2 min-h-[42px] focus-within:border-[#33a8c0] focus-within:ring-1 focus-within:ring-[#33a8c0] cursor-text transition-colors"
+                onClick={() => {
+                    inputRef.current?.focus();
+                    setIsOpen(true);
+                }}
+            >
+                {tags.map(t => <SiteTag key={t} label={t} platform={platform} onRemove={() => handleRemoveTag(t)} />)}
+                <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder={tags.length === 0 ? placeholder : ''}
+                    className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-300 min-w-[80px]"
+                    value={inputValue}
+                    onChange={e => {
+                        setInputValue(e.target.value);
+                        setIsOpen(true);
+                    }}
+                    onFocus={() => setIsOpen(true)}
+                    onKeyDown={handleKeyDown}
+                />
+            </div>
+            {isOpen && filteredSuggestions.length > 0 && (
+                <div className="absolute z-20 mt-1 max-h-64 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg py-1">
+                    {filteredSuggestions.map((s, index) => (
+                        <div
+                            key={s}
+                            className={cn(
+                                "px-3 py-2 text-sm cursor-pointer transition-colors",
+                                index === activeIndex ? "bg-[#eaf8fb] text-[#33a8c0] font-medium" : "text-gray-700 hover:bg-gray-50"
+                            )}
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                handleAddTag(s);
+                            }}
+                            onMouseEnter={() => setActiveIndex(index)}
+                        >
+                            {s}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 const PlatformCard = ({
     title,
     icon,
-    tags169,
-    tags916,
+    tags169: defaultTags169,
+    tags916: defaultTags916,
     publishType: defaultPublishType,
     placeholder = "Chọn site",
     platform
@@ -208,9 +333,11 @@ const PlatformCard = ({
     platform?: 'fb' | 'yt' | 'web'
 }) => {
     const [publishType, setPublishType] = useState<'wait' | 'auto' | 'schedule'>(defaultPublishType);
+    const [tags169, setTags169] = useState<string[]>(defaultTags169);
+    const [tags916, setTags916] = useState<string[]>(defaultTags916);
 
     return (
-        <div className="rounded-md border border-gray-200 bg-white overflow-hidden shadow-sm">
+        <div className="rounded-md border border-gray-200 bg-white shadow-sm">
             <div className="flex items-center gap-2 border-b border-gray-200 bg-white px-4 py-3">
                 {icon}
                 <h3 className="font-bold text-gray-800">{title}</h3>
@@ -219,17 +346,11 @@ const PlatformCard = ({
                 <div className="grid grid-cols-2 gap-6 mb-5">
                     <div>
                         <label className="block text-sm text-gray-600 mb-2">Video ngang 16:9</label>
-                        <div className="flex flex-wrap items-center gap-2 rounded-md border border-gray-200 bg-white p-2 min-h-[42px]">
-                            {tags169.map(t => <SiteTag key={t} label={t} platform={platform} />)}
-                            <input type="text" placeholder={placeholder} className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-300 min-w-[80px]" />
-                        </div>
+                        <TagInput tags={tags169} setTags={setTags169} platform={platform} placeholder={placeholder} />
                     </div>
                     <div>
                         <label className="block text-sm text-gray-600 mb-2">Video dọc 9:16</label>
-                        <div className="flex flex-wrap items-center gap-2 rounded-md border border-gray-200 bg-white p-2 min-h-[42px]">
-                            {tags916.map(t => <SiteTag key={t} label={t} platform={platform} />)}
-                            <input type="text" placeholder={placeholder} className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-300 min-w-[80px]" />
-                        </div>
+                        <TagInput tags={tags916} setTags={setTags916} platform={platform} placeholder={placeholder} />
                     </div>
                 </div>
 
@@ -282,6 +403,7 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
     const [hourInput, setHourInput] = useState<string>('');
     const [minuteInput, setMinuteInput] = useState<string>('');
     const [timeError, setTimeError] = useState<string>('');
+    const [watermarkPreviews, setWatermarkPreviews] = useState<string[]>([]);
 
     const [videoRatio, setVideoRatio] = useState<'16:9' | '9:16'>('16:9');
     const [progress, setProgress] = useState(0);
@@ -373,7 +495,20 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
 
     const handleFiles = (files: FileList | null) => {
         if (!files) return;
-        console.log(files[0]);
+        const fileArray = Array.from(files);
+        fileArray.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setWatermarkPreviews(prev => [...prev, reader.result as string]);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    };
+
+    const handleRemoveWatermark = (index: number) => {
+        setWatermarkPreviews(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleNext = () => {
@@ -488,10 +623,22 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                                 />
                             </FormField>
                             <FormField label="Watermark">
-                                <div className='grid grid-cols-12 gap-6'>
-                                    <div className="col-span-2">
-                                        <Upload onFileSelect={handleFiles} />
-                                    </div>
+                                <div className='flex flex-wrap items-start gap-4'>
+                                    <Upload onFileSelect={handleFiles} accept="image/*" multiple />
+                                    {watermarkPreviews.map((preview, index) => (
+                                        <div key={index} className="relative group h-[90px] w-[130px] rounded-lg border border-gray-200 overflow-hidden bg-[#F8F9FA] flex items-center justify-center">
+                                            <img src={preview} alt="Watermark" className="max-h-full max-w-full object-contain" />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveWatermark(index)}
+                                                className="absolute top-1 right-1 bg-white/90 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:text-red-500"
+                                            >
+                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    ))}
                                 </div>
                             </FormField>
                             <FormField label="Vị trí Watermark">
