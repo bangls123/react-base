@@ -53,8 +53,15 @@ const PaperPlaneIcon = () => (
 );
 
 const PlayIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={cn("w-4 h-4", className)}>
-        <path d="M8 5v14l11-7z" />
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        className={cn(
+            "w-5 h-5 fill-black",
+            className
+        )}
+    >
+        <path d="M8 5v14l11-7z" strokeLinejoin="round" />
     </svg>
 );
 
@@ -95,7 +102,7 @@ function CharacterSelect({ value, onChange }: { value: string, onChange: (val: s
         <div className="relative w-full" ref={dropdownRef}>
             <div
                 className={cn(
-                    "flex h-10 items-center justify-between rounded-md border bg-white px-3 py-2 text-sm cursor-pointer transition-colors",
+                    "flex h-10 items-center justify-between rounded-md border bg-gray-100 px-3 py-2 text-sm cursor-pointer transition-colors",
                     isOpen ? "border-blue-500 ring-1 ring-blue-500" : "border-gray-300 hover:border-gray-400"
                 )}
                 onClick={() => setIsOpen(!isOpen)}
@@ -116,13 +123,13 @@ function CharacterSelect({ value, onChange }: { value: string, onChange: (val: s
                             type="button"
                             title="Nghe thử giọng nói"
                             onClick={handlePlayVoice}
-                            className="flex h-7 w-7 items-center justify-center rounded-full text-[#33a8c0] hover:bg-[#e6f4f7] transition-colors"
+                            className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#33a8c0] shadow-sm hover:bg-gray-50 transition-colors"
                         >
                             <PlayIcon />
                         </button>
                     )}
-                    <svg className={cn("ml-1 h-4 w-4 text-gray-400 transition-transform", isOpen && "rotate-180")} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m6 9 6 6 6-6" />
+                    <svg className="ml-2 h-4 w-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 5H3 M7 1l-4 4 4 4 M3 19h18 M17 15l4 4-4 4" />
                     </svg>
                 </div>
             </div>
@@ -150,7 +157,6 @@ function CharacterSelect({ value, onChange }: { value: string, onChange: (val: s
     );
 }
 
-// --- COMPONENTS FOR STEP 3 ---
 const GlobeIcon = () => (
     <svg className="w-5 h-5 text-[#33a8c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
@@ -564,18 +570,15 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
     };
 
     return (
-        <div className="mx-auto flex h-[80vh] w-full max-w-5xl flex-col rounded-lg bg-white">
-            {/* HEADER: Stepper */}
+        <div className="mx-auto flex h-[960px] max-h-[80vh] w-full max-w-[880px] flex-col rounded-lg bg-white">
             <div className="shrink-0 border-b border-gray-100 px-0 pb-4 pt-0">
                 <div className="flex w-full justify-center">
                     <Stepper steps={MODAL_STEPS} currentStep={currentStep} />
                 </div>
             </div>
-
-            {/* BODY: Nội dung cuộn được */}
-            <div className="custom-scrollbar flex flex-1 flex-col gap-6 overflow-y-auto px-0 py-0">
+            <div className="custom-scrollbar flex flex-1 flex-col gap-5 overflow-y-auto px-0 py-0">
                 {currentStep === 0 && (
-                    <div className="animate-in fade-in flex flex-col gap-6 duration-300">
+                    <div className="animate-in fade-in flex flex-col gap-5 duration-300">
                         <FormSection title="Cấu hình model AI và nguồn dữ liệu">
                             <FormField label="Chọn loại model AI (LLM)" required error={errors.aiModel}>
                                 <Select
@@ -776,8 +779,6 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                         </FormSection>
                     </div>
                 )}
-
-                {/* ================= BƯỚC 1: THỬ NGHIỆM ================= */}
                 {currentStep === 1 && (
                     <div className="animate-in fade-in flex flex-col duration-300 rounded-md border border-gray-200 bg-white overflow-hidden shadow-sm flex-1 min-h-0">
                         <div className="bg-[#f3f6f9] shrink-0 px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-200">
