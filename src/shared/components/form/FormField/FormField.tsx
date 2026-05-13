@@ -11,9 +11,9 @@ type Props = {
 
 export const FormField = ({ label, required, error, children, className }: Props) => {
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("relative w-full", className)}>
       {label && (
-        <label className="text-sm font-medium text-gray-500">
+       <label className="block mb-1 h-[20px] text-sm font-medium leading-[20px] text-gray-700">
           {label}
           {required && <span className="text-red-500 ml-0.5">*</span>}
         </label>

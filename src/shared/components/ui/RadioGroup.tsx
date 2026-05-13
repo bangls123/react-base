@@ -48,7 +48,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               checked={value === option.value}
               onChange={() => !option.disabled && onChange(option.value)}
               disabled={option.disabled}
-              className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-6 w-6 border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <span className="text-sm text-gray-700">{option.label}</span>
           </label>

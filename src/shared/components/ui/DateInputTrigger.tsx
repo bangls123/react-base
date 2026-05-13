@@ -88,7 +88,7 @@ const DateInputTrigger = React.forwardRef<HTMLInputElement, DateInputProps>(
             }
             onClick?.(e);
           }}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          className="absolute inset-0 w-full h-8 opacity-0 cursor-pointer"
           {...props}
         />
         {error && <p className="mt-1 text-xs text-red-500">{error}</p>}

@@ -31,7 +31,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <div className="relative">
           <select
             className={cn(
-              'block w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50',
+              'h-9 block w-full appearance-none rounded-md border border-gray-300 bg-white px-3 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50',
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
               isPlaceholderSelected ? 'text-gray-400' : 'text-gray-900',
               className,

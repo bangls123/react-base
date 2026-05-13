@@ -9,7 +9,7 @@ export const FormSection = ({ title, children }: Props) => {
   return (
     <div className="rounded-md border border-gray-200 bg-white overflow-hidden">
       {title && (
-        <h3 className="bg-blue-50 border-b border-gray-200 px-4 py-3 text-base font-semibold text-gray-800">
+        <h3 className="flex h-[40px] items-center border-b border-gray-200 bg-blue-50 px-4 text-base font-semibold leading-[20px] text-gray-800">
           {title}
         </h3>
       )}

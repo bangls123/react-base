@@ -18,7 +18,7 @@ const Badge: React.FC<BadgeProps> = ({ className, variant = 'default', ...props 
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-md border px-4 py-1.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+        'h-[28px] inline-flex items-center rounded-md border px-4 py-1.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
         variants[variant],
         className,
       )}

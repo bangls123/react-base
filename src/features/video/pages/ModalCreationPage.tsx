@@ -3,7 +3,6 @@ import {
     Button,
     FormField,
     FormSection,
-    Input,
     RadioGroup,
     Select,
     Upload,
@@ -338,8 +337,10 @@ const PlatformCard = ({
 
     return (
         <div className="rounded-md border border-gray-200 bg-white shadow-sm">
-            <div className="flex items-center gap-2 border-b border-gray-200 bg-white px-4 py-3">
-                {icon}
+            <div className="h-[48px] flex items-center gap-2 border-b border-gray-200 bg-white px-4 py-3">
+                <div className="flex h-6 w-6 items-center justify-center">
+                    {icon}
+                </div>
                 <h3 className="font-bold text-gray-800">{title}</h3>
             </div>
             <div className="p-4 bg-[#fafbfc]">
@@ -681,7 +682,7 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                                         <div className="flex items-center gap-3 animate-in fade-in slide-in-from-top-1 duration-200">
                                             <div className="w-[80px]">
                                                 <Select
-                                                    placeholder="Chọn số ngày"
+                                                    placeholder=""
                                                     value={frequencyDays}
                                                     onChange={(e) => {
                                                         setFrequencyDays(e.target.value);
@@ -706,7 +707,7 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                             </FormField>
                             <FormField label="Thời điểm" required error={timeError}>
                                 <div className="flex items-center">
-                                    <div className="flex items-center rounded-md border border-gray-200 bg-[#F8F9FA] focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden">
+                                    <div className="h-[36px] flex items-center rounded-md border border-gray-200 bg-[#F8F9FA] focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden">
                                         <input
                                             placeholder="Giờ"
                                             value={hourInput}
@@ -784,25 +785,35 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                         </div>
                         <div className="custom-scrollbar p-4 flex flex-col gap-4 overflow-y-auto">
                             {/* Tabs */}
-                            <div className="flex w-full rounded-md bg-[#f8f9fa] p-1 border border-gray-200">
+                            <div className="h-[40px] px-1 py-1 flex w-full items-center gap-1 rounded-md bg-[#f8f9fa] border border-gray-200">
                                 <button
                                     type="button"
-                                    className={cn("flex-1 rounded-sm py-2 text-sm font-medium transition-colors", videoRatio === '16:9' ? "bg-white text-[#33a8c0] shadow-sm" : "text-gray-600 hover:text-gray-900")}
+                                    className={cn(
+                                        "h-[32px] flex-1 flex items-center justify-center rounded-sm text-sm font-medium leading-[20px] transition-colors",
+                                        videoRatio === '16:9' ? "bg-white text-[#33a8c0] shadow-sm" : "text-gray-600 hover:text-gray-900"
+                                    )}
                                     onClick={() => setVideoRatio('16:9')}
                                 >
                                     Ngang 16:9
                                 </button>
                                 <button
                                     type="button"
-                                    className={cn("flex-1 rounded-sm py-2 text-sm font-medium transition-colors", videoRatio === '9:16' ? "bg-white text-[#33a8c0] shadow-sm" : "text-gray-600 hover:text-gray-900")}
+                                    className={cn(
+                                        "h-[32px] flex-1 flex items-center justify-center rounded-sm text-sm font-medium leading-[20px] transition-colors",
+                                        videoRatio === '9:16' ? "bg-white text-[#33a8c0] shadow-sm" : "text-gray-600 hover:text-gray-900"
+                                    )}
                                     onClick={() => setVideoRatio('9:16')}
                                 >
                                     Dọc 9:16
                                 </button>
                             </div>
-
                             {/* Preview Area */}
-                            <div className={cn("flex flex-col items-center justify-center rounded-sm transition-all duration-300 overflow-hidden", videoRatio === '16:9' ? "aspect-video w-full" : "aspect-[9/16] w-[320px] mx-auto", isGenerated ? "bg-black border border-gray-200" : "bg-[#eaf8fb] border border-[#d2f0f4]", !isGenerated && videoRatio === '9:16' && "py-10")}>
+                            <div className={cn(
+                                "shrink-0 flex flex-col items-center justify-center rounded-sm transition-all duration-300 overflow-hidden",
+                                videoRatio === '16:9' ? "aspect-video w-full" : "aspect-[9/16] w-[320px] mx-auto",
+                                isGenerated ? "bg-black border border-gray-200" : "bg-[#eaf8fb] border border-[#d2f0f4]",
+                                !isGenerated && videoRatio === '9:16' && "py-10"
+                            )}>
                                 {isGenerating ? (
                                     <div className="flex w-full max-w-md flex-col items-center px-6">
                                         <div className="h-3 w-full overflow-hidden rounded-full bg-white shadow-inner">
