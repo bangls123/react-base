@@ -838,9 +838,9 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                                     <iframe
                                         width="100%"
                                         height="100%"
-                                        src="https://www.youtube.com/embed/GZ1gGW1B2JI?autoplay=1&mute=1"
+                                        src="https://www.youtube-nocookie.com/embed/FN7ALfpGxiI?autoplay=1&mute=1&origin=http://YOUR_IP_ADDRESS"
                                         title="Video thử nghiệm"
-                                        frameBorder="0"
+                                        style={{ border: 0 }}
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
                                         className="w-full h-full object-cover"
