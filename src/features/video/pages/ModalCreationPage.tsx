@@ -41,17 +41,6 @@ const EyeIcon = () => (
     </svg>
 );
 
-const PaperPlaneIcon = () => (
-    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="h-4 w-4">
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-        />
-    </svg>
-);
-
 const PlayIcon = ({ className }: { className?: string }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,12 +59,27 @@ const CHARACTERS = [
     { label: 'MC Ảo Minh Giang', value: 'mc_minh_giang', image: 'https://ui-avatars.com/api/?name=MG&background=0D8ABC&color=fff' },
     { label: 'MC Hữu Bằng', value: 'mc_huu_bang', image: 'https://ui-avatars.com/api/?name=HB&background=F56A00&color=fff' },
 ];
-
+const SendIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="22" y1="2" x2="11" y2="13" />
+    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+  </svg>
+);
 // --- CẤU HÌNH STEPS ---
 const MODAL_STEPS = [
     { label: 'Cấu hình gen video', icon: <FileTextIcon /> },
     { label: 'Thử nghiệm', icon: <EyeIcon /> },
-    { label: 'Cấu hình đăng', icon: <PaperPlaneIcon /> },
+    { label: 'Cấu hình đăng', icon: <SendIcon /> },
 ];
 
 function CharacterSelect({ value, onChange }: { value: string, onChange: (val: string) => void }) {
