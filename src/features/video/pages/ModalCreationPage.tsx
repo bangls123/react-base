@@ -346,14 +346,14 @@ const PlatformCard = ({
     const [tags916, setTags916] = useState<string[]>(defaultTags916);
 
     return (
-        <div className="rounded-md border border-gray-200 bg-white shadow-sm">
-            <div className="h-[48px] flex items-center gap-2 border-b border-gray-200 bg-white px-4 py-3">
+        <div className="rounded-md border border-gray-200 bg-white shadow-sm ">
+            <div className="h-[48px] flex items-center gap-2 border-b border-gray-200 bg-white px-4 py-3 rounded-t-[5px]">
                 <div className="flex h-6 w-6 items-center justify-center">
                     {icon}
                 </div>
                 <h3 className="font-bold text-gray-800">{title}</h3>
             </div>
-            <div className="p-4 bg-[#fafbfc]">
+            <div className="p-4 bg-[#fafbfc] rounded-b-[5px]">
                 <div className="grid grid-cols-2 gap-6 mb-5">
                     <div>
                         <label className="block text-sm text-gray-600 mb-2">Video ngang 16:9</label>
@@ -883,7 +883,7 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                     </div>
                 )}
                 {currentStep === 2 && (
-                    <div className="animate-in fade-in flex flex-col gap-4 duration-300 px-4 pb-6">
+                    <div className="animate-in fade-in flex flex-col gap-4 duration-300 ">
                         <PlatformCard
                             title="Webiste"
                             icon={<GlobeIcon />}
