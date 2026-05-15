@@ -60,20 +60,20 @@ const CHARACTERS = [
     { label: 'MC Hữu Bằng', value: 'mc_huu_bang', image: 'https://ui-avatars.com/api/?name=HB&background=F56A00&color=fff' },
 ];
 const SendIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="22" y1="2" x2="11" y2="13" />
-    <polygon points="22 2 15 22 11 13 2 9 22 2" />
-  </svg>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <line x1="22" y1="2" x2="11" y2="13" />
+        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
 );
 // --- CẤU HÌNH STEPS ---
 const MODAL_STEPS = [
@@ -960,8 +960,9 @@ function ModalCreationPage({ onClose }: ModalCreationPageProps) {
                 )}
                 <Button
                     type="button"
-                    className="flex min-w-[120px] items-center justify-center gap-2 bg-[#33a8c0] px-4 text-white transition-colors hover:bg-[#288b9e]"
+                    className="flex min-w-[120px] items-center justify-center gap-2 bg-[#33a8c0] px-4 text-white transition-colors hover:bg-[#288b9e] disabled:bg-[#C2C2C2] disabled:hover:bg-[#C2C2C2] disabled:opacity-100 disabled:cursor-not-allowed"
                     onClick={currentStep === MODAL_STEPS.length - 1 ? onClose : handleNext}
+                    disabled={currentStep === 1 && !isGenerated}
                 >
                     {currentStep === MODAL_STEPS.length - 1 ? (
                         <>
