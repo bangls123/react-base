@@ -49,3 +49,26 @@ export const TiktokIcon = () => (
         <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.01.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.64-5.46-.02-.33-.02-.66-.01-.99.14-2.12 1.28-4.14 3.02-5.36 1.23-.88 2.75-1.33 4.27-1.35.03 1.34.03 2.68.01 4.02-1.07.03-2.16.29-3.06.88-.71.46-1.28 1.15-1.5 1.97-.24.87-.14 1.83.31 2.62.4.73 1.05 1.3 1.8 1.62.77.34 1.64.41 2.46.22 1.24-.28 2.29-1.12 2.73-2.29.21-.55.29-1.14.28-1.72V.02z" />
     </svg>
 );
+export const CloseIcon = () => (
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="h-4 w-4">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+    </svg>
+);
+
+export const BackIcon = () => (
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="h-4 w-4">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+);
+
+export const NextIcon = () => (
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="h-4 w-4">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+);
+
+export const CheckIcon = () => (
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="h-4 w-4">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+);
