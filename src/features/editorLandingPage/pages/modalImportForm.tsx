@@ -331,15 +331,11 @@ function ModalImportForm() {
 
     if (isClosed) {
         return (
-            <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-[#0b1326] to-slate-900 flex flex-col items-center justify-center p-4 text-white font-sans">
-                <div className="text-center p-8 bg-obsidian-surface border border-obsidian-border rounded-custom shadow-2xl max-w-md">
-                    <div className="w-16 h-16 bg-blue-500/10 text-obsidian-accent rounded-full flex items-center justify-center mb-6 mx-auto border border-blue-500/20">
-                        <span className="material-symbols-outlined text-3xl text-obsidian-accent">dashboard</span>
-                    </div>
-                    <h2 className="text-xl font-bold mb-3">Obsidian Landing Page</h2>
+            <div className="min-h-[calc(100vh-140px)] w-full flex items-start justify-center pt-8 md:pt-14 p-4 text-white font-sans">
+                <div className="text-center p-8 bg-obsidian-surface rounded-2xl border border-obsidian-border shadow-2xl max-w-md">
                     <button
                         onClick={() => setIsClosed(false)}
-                        className="px-6 py-2.5 bg-obsidian-accent hover:bg-blue-600 rounded-custom text-sm font-semibold transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2 mx-auto"
+                        className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2 mx-auto"
                     >
                         <span className="material-symbols-outlined text-sm">open_in_new</span>
                         Tạo mới Landing Page
@@ -350,9 +346,9 @@ function ModalImportForm() {
     }
 
     return (
-        <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-[#0b1326] to-slate-900 flex items-center justify-center p-4 font-sans text-white">
+        <div className="min-h-[calc(100vh-140px)] w-full flex items-start justify-center pt-8 md:pt-14 p-4 font-sans text-white">
             {/* Main Modal Card */}
-            <main className="w-full max-w-5xl bg-obsidian-surface text-white rounded-custom shadow-2xl overflow-hidden border border-obsidian-border flex flex-col relative" id="landing-page-modal">
+            <main className="w-full max-w-5xl bg-obsidian-surface text-white rounded-2xl shadow-2xl overflow-hidden border border-obsidian-border flex flex-col relative" id="landing-page-modal">
 
                 {/* Header */}
                 <header className="flex items-center justify-between px-6 py-4 border-b border-obsidian-border bg-obsidian-surface">
@@ -370,7 +366,7 @@ function ModalImportForm() {
 
                 {/* Dynamic Toast banner inside modal header area */}
                 {successMsg && (
-                    <div className="absolute top-[68px] left-6 right-6 z-20 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-custom px-4 py-3 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn shadow-lg shadow-emerald-500/5">
+                    <div className="absolute top-[68px] left-6 right-6 z-20 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl px-4 py-3 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn shadow-lg shadow-emerald-500/5">
                         <svg className="w-4.5 h-4.5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -381,15 +377,15 @@ function ModalImportForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
 
                     {/* Left Column: Create New */}
-                    <section className="p-6 border-r border-obsidian-border flex flex-col h-full overflow-hidden">
+                    <section className="p-6 border-r border-b md:border-b-0 border-obsidian-border flex flex-col h-full overflow-hidden rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
                         <h2 className="text-sm font-bold text-obsidian-text-dim uppercase tracking-widest mb-4">Tạo mẫu mới</h2>
 
                         {/* Tabs Selector */}
-                        <div className="flex bg-obsidian-container p-1 rounded-custom mb-6">
+                        <div className="flex bg-obsidian-container p-1 rounded-xl mb-6">
                             <button
                                 type="button"
                                 onClick={() => { setActiveTab('file'); setTemplateName(''); }}
-                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-custom transition-all ${activeTab === 'file'
+                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-lg transition-all ${activeTab === 'file'
                                     ? 'bg-blue-600 text-white shadow-sm font-bold'
                                     : 'text-obsidian-text-dim hover:text-white hover:bg-obsidian-surface-bright/40'
                                     }`}
@@ -402,7 +398,7 @@ function ModalImportForm() {
                             <button
                                 type="button"
                                 onClick={() => { setActiveTab('code'); setTemplateName(''); }}
-                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-custom transition-all ${activeTab === 'code'
+                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-lg transition-all ${activeTab === 'code'
                                     ? 'bg-blue-600 text-white shadow-sm font-bold'
                                     : 'text-obsidian-text-dim hover:text-white hover:bg-obsidian-surface-bright/40'
                                     }`}
@@ -415,7 +411,7 @@ function ModalImportForm() {
                             <button
                                 type="button"
                                 onClick={() => { setActiveTab('url'); setTemplateName(''); }}
-                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-custom transition-all ${activeTab === 'url'
+                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-lg transition-all ${activeTab === 'url'
                                     ? 'bg-blue-600 text-white shadow-sm font-bold'
                                     : 'text-obsidian-text-dim hover:text-white hover:bg-obsidian-surface-bright/40'
                                     }`}
@@ -441,7 +437,7 @@ function ModalImportForm() {
                                         activeTab === 'code' ? 'Ví dụ: Trang quảng cáo sản phẩm' :
                                             'Ví dụ: Landing page Lexus LX600'
                                 }
-                                className="w-full bg-obsidian-surface-bright/20 border border-obsidian-border rounded-custom px-4 py-2.5 text-sm text-white focus:bg-obsidian-surface-bright/40 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-500"
+                                className="w-full bg-obsidian-surface-bright/20 border border-obsidian-border rounded-xl px-4 py-2.5 text-sm text-white focus:bg-obsidian-surface-bright/40 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-500"
                             />
                         </div>
 
@@ -455,7 +451,7 @@ function ModalImportForm() {
                                         </label>
                                         <div
                                             onClick={() => fileInputRef.current?.click()}
-                                            className={`dotted-zone border border-obsidian-border rounded-custom bg-obsidian-container/30 hover:bg-obsidian-container/50 transition-colors cursor-pointer p-8 flex flex-col items-center justify-center text-center ${fileName ? 'border-emerald-500/40 bg-emerald-500/5' : ''
+                                            className={`dotted-zone border border-obsidian-border rounded-xl bg-obsidian-container/30 hover:bg-obsidian-container/50 transition-colors cursor-pointer p-8 flex flex-col items-center justify-center text-center ${fileName ? 'border-emerald-500/40 bg-emerald-500/5' : ''
                                                 }`}
                                         >
                                             <input
@@ -493,7 +489,7 @@ function ModalImportForm() {
                                     <button
                                         type="submit"
                                         disabled={!fileContent}
-                                        className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-custom flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
+                                        className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
                                     >
                                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -513,7 +509,7 @@ function ModalImportForm() {
                                             value={htmlCode}
                                             onChange={(e) => setHtmlCode(e.target.value)}
                                             placeholder="<html>&#10;  <body>&#10;    <h1>Xin chào</h1>&#10;  </body>&#10;</html>"
-                                            className="w-full bg-obsidian-surface-bright/20 border border-obsidian-border rounded-custom px-4 py-2.5 text-xs font-mono min-h-[160px] max-h-[220px] text-white focus:bg-obsidian-surface-bright/40 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-500"
+                                            className="w-full bg-obsidian-surface-bright/20 border border-obsidian-border rounded-xl px-4 py-2.5 text-xs font-mono min-h-[160px] max-h-[220px] text-white focus:bg-obsidian-surface-bright/40 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-500"
                                         />
                                         {codeError && <p className="mt-2 text-xs text-red-500 font-semibold">{codeError}</p>}
                                     </div>
@@ -521,7 +517,7 @@ function ModalImportForm() {
                                     <button
                                         type="submit"
                                         disabled={!htmlCode.trim()}
-                                        className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-custom flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
+                                        className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
                                     >
                                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -542,10 +538,10 @@ function ModalImportForm() {
                                             value={htmlUrl}
                                             onChange={(e) => setHtmlUrl(e.target.value)}
                                             placeholder="https://example.com/landing-page"
-                                            className="w-full bg-obsidian-surface-bright/20 border border-obsidian-border rounded-custom px-4 py-2.5 text-sm text-white focus:bg-obsidian-surface-bright/40 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-500"
+                                            className="w-full bg-obsidian-surface-bright/20 border border-obsidian-border rounded-xl px-4 py-2.5 text-sm text-white focus:bg-obsidian-surface-bright/40 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-500"
                                         />
                                         {urlError && <p className="mt-2 text-xs text-red-500 font-semibold">{urlError}</p>}
-                                        <p className="mt-3 text-[10px] text-obsidian-text-dim leading-normal bg-obsidian-container/30 p-2.5 rounded-custom border border-obsidian-border">
+                                        <p className="mt-3 text-[10px] text-obsidian-text-dim leading-normal bg-obsidian-container/30 p-2.5 rounded-xl border border-obsidian-border">
                                             <strong>Lưu ý:</strong> Một số trang web có thể chặn nhúng xem trước Iframe do chính sách bảo mật bảo vệ (CORS/X-Frame-Options).
                                         </p>
                                     </div>
@@ -553,7 +549,7 @@ function ModalImportForm() {
                                     <button
                                         type="submit"
                                         disabled={!htmlUrl.trim()}
-                                        className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-custom flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
+                                        className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
                                     >
                                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -566,7 +562,7 @@ function ModalImportForm() {
                     </section>
 
                     {/* Right Column: Templates List */}
-                    <section className="p-6 bg-[#091020]/40 flex flex-col h-[560px] overflow-hidden" data-purpose="template-list-section">
+                    <section className="p-6 bg-[#091020]/40 flex flex-col h-[560px] overflow-hidden rounded-b-2xl md:rounded-bl-none md:rounded-r-2xl" data-purpose="template-list-section">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-sm font-bold text-obsidian-text-dim uppercase tracking-widest flex items-center gap-2">
                                 <span className="material-symbols-outlined text-base">history</span>
@@ -580,7 +576,7 @@ function ModalImportForm() {
                         {/* List scroll container */}
                         <div className="flex-1 flex flex-col gap-3 overflow-y-auto custom-scrollbar pr-2" data-purpose="template-history-list">
                             {templates.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center h-full text-center border border-dashed border-obsidian-border rounded-custom bg-obsidian-container/10 p-6">
+                                <div className="flex flex-col items-center justify-center h-full text-center border border-dashed border-obsidian-border rounded-xl bg-obsidian-container/10 p-6">
                                     <span className="material-symbols-outlined text-3xl text-obsidian-text-dim mb-3">folder_open</span>
                                     <p className="text-xs font-semibold text-white">Chưa có mẫu nào</p>
                                     <p className="text-[10px] text-obsidian-text-dim mt-1 max-w-[200px]">Hãy thêm mẫu mới từ bảng điều khiển bên trái.</p>
@@ -592,7 +588,7 @@ function ModalImportForm() {
                                         <div
                                             key={template.id}
                                             onClick={() => handleSelectTemplate(template.id)}
-                                            className={`flex items-center gap-4 p-3 rounded-custom bg-obsidian-container/30 border transition-all cursor-pointer group relative ${isSelected
+                                            className={`flex items-center gap-4 p-3 rounded-xl bg-obsidian-container/30 border transition-all cursor-pointer group relative ${isSelected
                                                 ? 'border-obsidian-accent bg-obsidian-container/60 shadow-md shadow-blue-500/5'
                                                 : 'border-obsidian-border hover:bg-obsidian-container/60 hover:border-obsidian-accent/50'
                                                 }`}
@@ -635,7 +631,7 @@ function ModalImportForm() {
                                                 <button
                                                     type="button"
                                                     onClick={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
-                                                    className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-slate-700 text-obsidian-text-dim hover:text-white border border-obsidian-border rounded-custom flex items-center justify-center transition-colors"
+                                                    className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-slate-700 text-obsidian-text-dim hover:text-white border border-obsidian-border rounded-lg flex items-center justify-center transition-colors"
                                                     title="Xem trước mẫu"
                                                 >
                                                     <span className="material-symbols-outlined text-[15px]">visibility</span>
@@ -643,14 +639,14 @@ function ModalImportForm() {
 
                                                 {/* Active Selection / Use Button */}
                                                 {isSelected ? (
-                                                    <div className="w-7.5 h-7.5 bg-blue-500/10 border border-blue-500/30 text-obsidian-accent rounded-custom flex items-center justify-center" title="Mẫu đang chọn">
+                                                    <div className="w-7.5 h-7.5 bg-blue-500/10 border border-blue-500/30 text-obsidian-accent rounded-lg flex items-center justify-center" title="Mẫu đang chọn">
                                                         <span className="material-symbols-outlined text-[15px]">check</span>
                                                     </div>
                                                 ) : (
                                                     <button
                                                         type="button"
                                                         onClick={(e) => { e.stopPropagation(); handleSelectTemplate(template.id); }}
-                                                        className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-blue-500/10 text-obsidian-text-dim hover:text-obsidian-accent border border-obsidian-border rounded-custom flex items-center justify-center transition-colors"
+                                                        className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-blue-500/10 text-obsidian-text-dim hover:text-obsidian-accent border border-obsidian-border rounded-lg flex items-center justify-center transition-colors"
                                                         title="Sử dụng mẫu này"
                                                     >
                                                         <span className="material-symbols-outlined text-[15px]">check</span>
@@ -662,7 +658,7 @@ function ModalImportForm() {
                                                     <button
                                                         type="button"
                                                         onClick={(e) => handleDeleteTemplate(template.id, e)}
-                                                        className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-red-500/10 text-obsidian-text-dim hover:text-red-500 border border-obsidian-border rounded-custom flex items-center justify-center transition-colors"
+                                                        className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-red-500/10 text-obsidian-text-dim hover:text-red-500 border border-obsidian-border rounded-lg flex items-center justify-center transition-colors"
                                                         title="Xóa mẫu"
                                                     >
                                                         <span className="material-symbols-outlined text-[15px]">delete</span>
@@ -689,7 +685,7 @@ function ModalImportForm() {
                     />
 
                     {/* Content container */}
-                    <div className="relative z-50 w-full max-w-4xl h-[80vh] flex flex-col bg-obsidian-surface text-white rounded-custom border border-obsidian-border shadow-2xl overflow-hidden">
+                    <div className="relative z-50 w-full max-w-4xl h-[80vh] flex flex-col bg-obsidian-surface text-white rounded-2xl border border-obsidian-border shadow-2xl overflow-hidden">
 
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 border-b border-obsidian-border bg-obsidian-surface">
@@ -743,7 +739,7 @@ function ModalImportForm() {
                             <button
                                 type="button"
                                 onClick={() => setPreviewTemplate(null)}
-                                className="px-4 py-2 border border-obsidian-border rounded-custom text-sm font-semibold hover:bg-obsidian-surface-bright transition-colors text-white"
+                                className="px-4 py-2 border border-obsidian-border rounded-xl text-sm font-semibold hover:bg-obsidian-surface-bright transition-colors text-white"
                             >
                                 Đóng xem trước
                             </button>
@@ -753,7 +749,7 @@ function ModalImportForm() {
                                     handleSelectTemplate(previewTemplate.id);
                                     setPreviewTemplate(null);
                                 }}
-                                className="px-4 py-2 bg-obsidian-accent hover:bg-blue-600 rounded-custom text-sm font-semibold text-white transition-colors shadow-lg shadow-blue-500/20"
+                                className="px-4 py-2 bg-obsidian-accent hover:bg-blue-600 rounded-xl text-sm font-semibold text-white transition-colors shadow-lg shadow-blue-500/20"
                             >
                                 Sử dụng mẫu này
                             </button>

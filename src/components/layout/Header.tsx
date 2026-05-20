@@ -9,8 +9,10 @@ import { env } from '@config/env';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
-    'rounded-md px-3 py-2 text-sm font-medium transition-colors',
-    isActive ? 'bg-primary-100 text-primary-700' : 'text-gray-700 hover:bg-gray-100',
+    'rounded-custom px-3 py-2 text-sm font-semibold transition-all border border-transparent',
+    isActive
+      ? 'bg-obsidian-container text-white border-obsidian-border shadow-sm shadow-black/10'
+      : 'text-obsidian-text-dim hover:text-white hover:bg-obsidian-surface-bright/40',
   );
 
 export const Header = () => {
@@ -19,13 +21,14 @@ export const Header = () => {
   const user = useAppSelector(selectCurrentUser);
 
   return (
-    <header className="border-b border-gray-200 bg-white">
+    <header className="border-b border-obsidian-border bg-obsidian-surface/95 backdrop-blur-md sticky top-0 z-40">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-        <Link to={ROUTES.HOME} className="text-xl font-bold text-primary-600">
-          {env.APP_NAME}
+        <Link to={ROUTES.HOME} className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
+          <span>{env.APP_NAME}</span>
         </Link>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-1.5">
           <NavLink to={ROUTES.HOME} className={navLinkClass} end>
             Home
           </NavLink>
@@ -43,14 +46,24 @@ export const Header = () => {
         <div className="flex items-center gap-3">
           {isAuth ? (
             <>
-              <span className="text-sm text-gray-600">Hi, {user?.name ?? 'User'}</span>
-              <Button variant="secondary" size="sm" onClick={() => dispatch(logout())}>
+              <span className="text-sm text-obsidian-text-dim">Hi, {user?.name ?? 'User'}</span>
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                onClick={() => dispatch(logout())}
+                className="bg-obsidian-container border border-obsidian-border text-white hover:bg-obsidian-surface-bright transition-colors rounded-custom"
+              >
                 Logout
               </Button>
             </>
           ) : (
             <Link to={ROUTES.LOGIN}>
-              <Button size="sm">Login</Button>
+              <Button 
+                size="sm"
+                className="bg-obsidian-accent hover:bg-blue-600 text-white border border-transparent shadow-lg shadow-blue-500/10 rounded-custom px-4"
+              >
+                Login
+              </Button>
             </Link>
           )}
         </div>
