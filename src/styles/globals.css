@@ -36,7 +36,7 @@
 
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #d1d5db #f3f4f6;
+    scrollbar-color: #31394d transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -44,10 +44,20 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-gray-100;
+    background: transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-gray-300 hover:bg-gray-400;
+    background: #31394d;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+  }
+
+  .dotted-zone {
+    border-style: dashed;
+    border-width: 2px;
   }
 }

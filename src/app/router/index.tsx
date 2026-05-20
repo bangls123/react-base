@@ -2,9 +2,10 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { MainLayout } from '@components/layout/MainLayout';
 import { ROUTES } from '@constants/routes';
-import { HomePage } from '@features/misc/pages/HomePage';
 import { UIDemoPage } from '@features/misc/pages/UIDemoPage';
 import { VideoCreationPage } from '@features/video/pages/VideoCreationPage';
+import ToolSetContentPage from '@features/counter/pages/toolSetContentPage';
+import ModalImportForm from '@/features/editorLandingPage/pages/modalImportForm';
 
 export const router = createBrowserRouter([
   {
@@ -13,11 +14,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <VideoCreationPage />,
-      },
-      {
-        path: ROUTES.HOME,
-        element: <HomePage />,
+        element: <ModalImportForm />,
       },
       {
         path: ROUTES.VIDEO_CREATION,
@@ -29,7 +26,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.COUNTER,
-        element: <div>Counter Page (Coming Soon)</div>,
+        element: <ToolSetContentPage />,
       },
       {
         path: ROUTES.USERS,
