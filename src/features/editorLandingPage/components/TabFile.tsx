@@ -75,9 +75,8 @@ export const TabFile: React.FC<TabFileProps> = ({ onSave }) => {
                 </label>
                 <div
                     onClick={() => fileInputRef.current?.click()}
-                    className={`dotted-zone border border-obsidian-border rounded-xl bg-obsidian-container/30 hover:bg-obsidian-container/50 transition-colors cursor-pointer p-8 flex flex-col items-center justify-center text-center ${
-                        fileName ? 'border-emerald-500/40 bg-emerald-500/5' : ''
-                    }`}
+                    className={`dotted-zone border border-obsidian-border rounded-xl bg-obsidian-container/30 hover:bg-obsidian-container/50 transition-colors cursor-pointer p-8 flex flex-col items-center justify-center text-center ${fileName ? 'border-emerald-500/40 bg-emerald-500/5' : ''
+                        }`}
                 >
                     <input
                         type="file"
@@ -116,10 +115,7 @@ export const TabFile: React.FC<TabFileProps> = ({ onSave }) => {
                 disabled={!fileContent}
                 className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
             >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                </svg>
-                Lưu mẫu từ file
+                Mở Editor Landing Page
             </button>
         </form>
     );

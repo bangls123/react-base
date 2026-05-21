@@ -1,95 +1,62 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { ACTIVE_TAB, type ActiveTabType } from '../constants/constants';
 import { TabSelector } from '../components/TabSelector';
-import presetTemplates from '../constants/presets.json';
 import { CloseIcon, CheckCircleIcon } from '@/shared/icons';
+import { formatRelativeTime } from '@/utils/format';
+import { parseHTMLIntoBlocks, type ParseResult } from '../components/processChunkHtml';
+import { mapBlocksToComponents, type EditorComponentData } from '../components/blockMapper';
 
-interface LandingPageTemplate {
+export interface LandingPageTemplate {
     id: string;
     name: string;
     type: ActiveTabType;
     content: string;
     createdAt: string;
     thumbnailUrl?: string;
+    code?: string;
+    parsedStructure?: ParseResult;
+    componentsData?: EditorComponentData[];
 }
 
-// Pure helper function for relative time formatting defined outside the component
-// to prevent recreation on every render cycle.
-const formatRelativeTime = (isoString: string) => {
-    try {
-        const date = new Date(isoString);
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffMins = Math.floor(diffMs / (60 * 1000));
-        const diffHours = Math.floor(diffMs / (60 * 60 * 1000));
-        const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000));
-
-        if (diffMins < 60) {
-            return `Cập nhật ${diffMins || 1} phút trước`;
-        } else if (diffHours < 24) {
-            return `Cập nhật ${diffHours} giờ trước`;
-        } else if (diffDays === 1) {
-            return 'Cập nhật Hôm qua';
-        } else {
-            return `Cập nhật ngày ${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        }
-    } catch {
-        return 'Cập nhật gần đây';
-    }
-};
-
 function ModalImportForm() {
-    // Tab states
     const [activeTab, setActiveTab] = useState<ActiveTabType>(ACTIVE_TAB.FILE);
 
-    // Templates state
     const [templates, setTemplates] = useState<LandingPageTemplate[]>([]);
     const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
 
-    // Preview state
     const [previewTemplate, setPreviewTemplate] = useState<LandingPageTemplate | null>(null);
 
-    // Feedback messages
     const [successMsg, setSuccessMsg] = useState('');
 
-    // Closed state
     const [isClosed, setIsClosed] = useState(true);
+    useEffect(() => {
+        const fetchTemplates = async () => {
+            try {
+                const response = await fetch('https://6a0bc2965aa893e1015a723c.mockapi.io/api/v1/source');
+                let customTemplates: LandingPageTemplate[] = [];
+                if (response.ok) {
+                    customTemplates = await response.json();
+                }
+                const initialTemplates = [...customTemplates];
+                setTemplates(initialTemplates);
 
-    // Memoize preset templates loaded from JSON file
-    const initialPresets = useMemo(() => {
-        return presetTemplates as LandingPageTemplate[];
+                // const activeId = localStorage.getItem('active_landing_page_template_id');
+                // if (activeId && initialTemplates.some(t => t.id === activeId || t.code === activeId)) {
+                //     setSelectedTemplateId(activeId);
+                // } else if (initialTemplates.length > 0) {
+                //     const defaultId = initialTemplates[0].code || initialTemplates[0].id;
+                //     setSelectedTemplateId(defaultId);
+                //     localStorage.setItem('active_landing_page_template_id', defaultId);
+                // }
+            } catch (error) {
+                console.error("Failed to fetch templates from MockAPI", error);
+                setTemplates([]);
+            }
+        };
+
+        fetchTemplates();
     }, []);
 
-    // Load templates from localStorage on mount (and pre-populate presets if empty)
-    useEffect(() => {
-        const savedTemplates = localStorage.getItem('imported_landing_page_templates');
-        let initialTemplates: LandingPageTemplate[] = [];
-
-        if (savedTemplates) {
-            try {
-                initialTemplates = JSON.parse(savedTemplates);
-            } catch (e) {
-                console.error('Failed to parse saved templates:', e);
-            }
-        }
-
-        if (initialTemplates.length === 0) {
-            initialTemplates = initialPresets;
-            localStorage.setItem('imported_landing_page_templates', JSON.stringify(initialTemplates));
-        }
-
-        setTemplates(initialTemplates);
-
-        const activeId = localStorage.getItem('active_landing_page_template_id');
-        if (activeId) {
-            setSelectedTemplateId(activeId);
-        } else if (initialTemplates.length > 0) {
-            setSelectedTemplateId(initialTemplates[0].id);
-            localStorage.setItem('active_landing_page_template_id', initialTemplates[0].id);
-        }
-    }, [initialPresets]);
-
-    // Toast feedback helper
     const showToast = useCallback((message: string) => {
         setSuccessMsg(message);
         const timer = setTimeout(() => {
@@ -98,25 +65,80 @@ function ModalImportForm() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Close modal state
     const handleClose = useCallback(() => {
         setIsClosed(true);
     }, []);
 
-    const handleSaveTemplate = useCallback((name: string, content: string, type: ActiveTabType) => {
+    const handleSaveTemplate = useCallback(async (name: string, content: string, type: ActiveTabType) => {
+        const code = `tmpl_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+        let parsedStructure = undefined;
+        let mappedComponents = undefined;
+        try {
+            let htmlToParse = content;
+            if (type === ACTIVE_TAB.URL) {
+                const response = await fetch(content);
+                htmlToParse = await response.text();
+            }
+            parsedStructure = parseHTMLIntoBlocks(htmlToParse);
+            if (parsedStructure) {
+                mappedComponents = mapBlocksToComponents(parsedStructure.blocks);
+            }
+        } catch (error) {
+            console.error("Failed to parse HTML blocks:", error);
+        }
+
         const newTemplate: LandingPageTemplate = {
-            id: `tmpl_${Date.now()}`,
+            id: '', // Will be updated from MockAPI
+            code,
             name,
             type,
             content,
+            parsedStructure,
+            componentsData: mappedComponents,
             createdAt: new Date().toISOString(),
         };
 
         setTemplates(prev => {
-            const updated = [newTemplate, ...prev];
-            localStorage.setItem('imported_landing_page_templates', JSON.stringify(updated));
-            return updated;
+            // Optimistically update UI
+            const tempTemplate = { ...newTemplate, id: `temp_${Date.now()}` };
+            return [tempTemplate, ...prev];
         });
+
+        try {
+            // POST to /source
+            const sourceRes = await fetch('https://6a0bc2965aa893e1015a723c.mockapi.io/api/v1/source', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name, type, content, code, createdAt: Date.now(), thumbnailUrl: ""
+                })
+            });
+            let createdSourceId = '';
+            if (sourceRes.ok) {
+                const createdSource = await sourceRes.json();
+                createdSourceId = createdSource.id;
+            }
+
+            // POST to /components
+            if (mappedComponents && parsedStructure) {
+                await fetch('https://6a0bc2965aa893e1015a723c.mockapi.io/api/v1/components', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        code,
+                        componentsData: mappedComponents,
+                        stats: parsedStructure.stats
+                    })
+                });
+            }
+
+            // Update with real ID from server
+            if (createdSourceId) {
+                setTemplates(prev => prev.map(t => t.code === code ? { ...t, id: createdSourceId } : t));
+            }
+        } catch (error) {
+            console.error("Failed to save to MockAPI", error);
+        }
 
         showToast(
             type === ACTIVE_TAB.FILE ? 'Tải lên file mẫu thành công!' :
@@ -125,29 +147,75 @@ function ModalImportForm() {
         );
     }, [showToast]);
 
-    // Select template
-    const handleSelectTemplate = useCallback((id: string) => {
-        setSelectedTemplateId(id);
-        localStorage.setItem('active_landing_page_template_id', id);
+    const handleSelectTemplate = useCallback((idOrCode: string) => {
+        setSelectedTemplateId(idOrCode);
+        localStorage.setItem('active_landing_page_template_id', idOrCode);
+
         setTemplates(prev => {
-            const t = prev.find(x => x.id === id);
+            const t = prev.find(x => x.id === idOrCode || x.code === idOrCode);
             if (t) {
                 showToast(`Đã chọn làm mẫu hiện tại: ${t.name}`);
+
+                if (!t.componentsData && t.code) {
+                    // Load components from MockAPI
+                    (async () => {
+                        try {
+                            const res = await fetch(`https://6a0bc2965aa893e1015a723c.mockapi.io/api/v1/components?code=${t.code}`);
+                            if (res.ok) {
+                                const data = await res.json();
+                                if (data && data.length > 0) {
+                                    const componentsData = data[0].componentsData;
+                                    setTemplates(currentPrev => currentPrev.map(item =>
+                                        item.code === t.code ? { ...item, componentsData } : item
+                                    ));
+                                }
+                            }
+                        } catch (error) {
+                            console.error("Failed to fetch components for template", error);
+                        }
+                    })();
+                } else if (!t.componentsData && !t.code) {
+                    // On-the-fly parse for hardcoded presets
+                    (async () => {
+                        try {
+                            let htmlToParse = t.content;
+                            if (t.type === ACTIVE_TAB.URL) {
+                                const response = await fetch(t.content);
+                                htmlToParse = await response.text();
+                            }
+                            const parsedStructure = parseHTMLIntoBlocks(htmlToParse);
+                            const componentsData = mapBlocksToComponents(parsedStructure.blocks);
+
+                            setTemplates(currentPrev => {
+                                return currentPrev.map(item =>
+                                    item.id === t.id ? { ...item, parsedStructure, componentsData } : item
+                                );
+                            });
+                        } catch (error) {
+                            console.error("Failed to parse blocks:", error);
+                        }
+                    })();
+                }
             }
             return prev;
         });
     }, [showToast]);
 
-    // Delete template
-    const handleDeleteTemplate = useCallback((id: string, e: React.MouseEvent) => {
+    const handleDeleteTemplate = useCallback(async (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
+
+        let templateCode = '';
         setTemplates(prev => {
+            const templateToDelete = prev.find(t => t.id === id);
+            if (templateToDelete) {
+                templateCode = templateToDelete.code || '';
+            }
+
             const updated = prev.filter(t => t.id !== id);
-            localStorage.setItem('imported_landing_page_templates', JSON.stringify(updated));
 
             setSelectedTemplateId(prevSelected => {
-                if (prevSelected === id) {
-                    const newActiveId = updated.length > 0 ? updated[0].id : '';
+                if (prevSelected === id || (templateCode && prevSelected === templateCode)) {
+                    const newActiveId = updated.length > 0 ? (updated[0].code || updated[0].id) : '';
                     if (newActiveId) {
                         localStorage.setItem('active_landing_page_template_id', newActiveId);
                     } else {
@@ -161,10 +229,18 @@ function ModalImportForm() {
             return updated;
         });
         showToast('Đã xóa mẫu thành công!');
-    }, [showToast]);
 
-    // Memoize the history templates list item layout to prevent re-renders of list items 
-    // when active tab is changed or when unrelated parent state updates occur.
+        if (!id.startsWith('preset_')) {
+            try {
+                // DELETE from MockAPI
+                await fetch(`https://6a0bc2965aa893e1015a723c.mockapi.io/api/v1/source/${id}`, { method: 'DELETE' });
+                // We could also try to delete from /components if we had the component id, 
+                // but MockAPI handles it usually via a separate request. We'll leave it simple for now.
+            } catch (e) {
+                console.error("Failed to delete from API", e);
+            }
+        }
+    }, [showToast]);
     const renderedTemplatesList = useMemo(() => {
         if (templates.length === 0) {
             return (
@@ -177,11 +253,12 @@ function ModalImportForm() {
         }
 
         return templates.map((template) => {
-            const isSelected = selectedTemplateId === template.id;
+            const templateKey = template.code || template.id;
+            const isSelected = selectedTemplateId === templateKey || selectedTemplateId === template.id;
             return (
                 <div
                     key={template.id}
-                    onClick={() => handleSelectTemplate(template.id)}
+                    onClick={() => handleSelectTemplate(templateKey)}
                     className={`flex items-center gap-4 p-3 rounded-xl bg-obsidian-container/30 border transition-all cursor-pointer group relative ${isSelected
                         ? 'border-obsidian-accent bg-obsidian-container/60 shadow-md shadow-blue-500/5'
                         : 'border-obsidian-border hover:bg-obsidian-container/60 hover:border-obsidian-accent/50'
@@ -239,7 +316,7 @@ function ModalImportForm() {
                         ) : (
                             <button
                                 type="button"
-                                onClick={(e) => { e.stopPropagation(); handleSelectTemplate(template.id); }}
+                                onClick={(e) => { e.stopPropagation(); handleSelectTemplate(templateKey); }}
                                 className="w-7.5 h-7.5 bg-obsidian-surface-bright hover:bg-blue-500/10 text-obsidian-text-dim hover:text-obsidian-accent border border-obsidian-border rounded-lg flex items-center justify-center transition-colors"
                                 title="Sử dụng mẫu này"
                             >
@@ -400,7 +477,7 @@ function ModalImportForm() {
                             <button
                                 type="button"
                                 onClick={() => {
-                                    handleSelectTemplate(previewTemplate.id);
+                                    handleSelectTemplate(previewTemplate.code || previewTemplate.id);
                                     setPreviewTemplate(null);
                                 }}
                                 className="px-4 py-2 bg-obsidian-accent hover:bg-blue-600 rounded-xl text-sm font-semibold text-white transition-colors shadow-lg shadow-blue-500/20"

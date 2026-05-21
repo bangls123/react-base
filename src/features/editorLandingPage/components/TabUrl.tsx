@@ -70,10 +70,7 @@ export const TabUrl: React.FC<TabUrlProps> = ({ onSave }) => {
                 disabled={!htmlUrl.trim()}
                 className="w-full bg-obsidian-accent hover:bg-blue-600 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:pointer-events-none"
             >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                </svg>
-                Lưu liên kết URL
+                Mở Editor Landing Page
             </button>
         </form>
     );
